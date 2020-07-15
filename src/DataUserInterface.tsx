@@ -1,28 +1,60 @@
+/** @jsx jsx */
 import React from "react";
-import { css } from "@emotion/core";
+import { css, jsx } from "@emotion/core";
+import { IFood } from "./types";
 
-class DataUserInterface extends React.Component {
-  state = {
-    food: "",
-    calories: 0,
-    carbs: 0,
-    proteins: 0,
-    fats: 0,
-    fiber: 0,
-    loading: false,
-  };
+interface IProps {
+  selectedItem: IFood | undefined;
+  foodListOpen: boolean;
+}
 
-  render() {
-    const { calories, carbs, proteins, fats, fiber } = this.state;
+export default class DataUserInterface extends React.Component<IProps> {
+  barStyle = css`
+    transition-property: stroke-dasharray;
+    transition-duration: 1s;
+    transition-timing-function: cubic-bezier(0.12, 0.25, 0.22, 1.55);
+  `;
+
+  public render() {
+    let image, calories, carbs, proteins, fats, fiber;
+
+    if (this.props.selectedItem) {
+      const item = this.props.selectedItem;
+      image = item.image;
+      calories = item.calories;
+      carbs = item.carbs;
+      proteins = item.carbs;
+      fats = item.fats;
+      fiber = item.fiber;
+    } else {
+      image = "";
+      calories = 0;
+      carbs = 0;
+      proteins = 0;
+      fats = 0;
+      fiber = 0;
+    }
+
     return (
       <svg
-        id="nutritionFactsUI"
+        css={css`
+          max-width: 350px;
+          max-height: 75vh;
+        `}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 200 349.25"
       >
         <image
           id="selectedFoodImage"
-          href=""
+          css={css`
+            transform: ${this.props.foodListOpen ? "scale(0.7)" : "scale(1)"};
+            transform-origin: center;
+            transform-box: fill-box;
+            transition: ${this.props.foodListOpen
+              ? "none"
+              : "transform 0.5s cubic-bezier(0, 1.42, 1, 1.69)"};
+          `}
+          href={image}
           x="45"
           y="60"
           width="110"
@@ -45,6 +77,7 @@ class DataUserInterface extends React.Component {
             id="caloriesBar"
             d="M100,23A92,92,0,1,1,8,115a92.1,92.1,0,0,1,92-92"
             css={css`
+              ${this.barStyle}
               stroke-dasharray: 0 578;
             `}
           />
@@ -84,6 +117,7 @@ class DataUserInterface extends React.Component {
             x2="100"
             y2="334"
             css={css`
+              ${this.barStyle}
               clip-path: url(#barsClip);
               transform: translateX(-75px);
               stroke: #bdf2ff;
@@ -98,6 +132,7 @@ class DataUserInterface extends React.Component {
             x2="100"
             y2="334"
             css={css`
+              ${this.barStyle}
               clip-path: url(#barsClip);
               transform: translateX(-25px);
               stroke: #ffae67;
@@ -112,6 +147,7 @@ class DataUserInterface extends React.Component {
             x2="100"
             y2="334"
             css={css`
+              ${this.barStyle}
               clip-path: url(#barsClip);
               transform: translateX(25px);
               stroke: #fffe8f;
@@ -126,6 +162,7 @@ class DataUserInterface extends React.Component {
             x2="100"
             y2="334"
             css={css`
+              ${this.barStyle}
               clip-path: url(#barsClip);
               transform: translateX(75px);
               stroke: #d7ff61;
@@ -184,11 +221,15 @@ class DataUserInterface extends React.Component {
             />
           </g>
           <g
-            id="barsTexts"
             css={css`
               font-size: 11px;
               font-family: inherit;
               fill: #fff;
+              & > text {
+                text-anchor: middle;
+                transition-property: opacity;
+                transition-duration: 0.5s;
+              }
             `}
           >
             <text id="fiberValue" transform="translate(175 346)">
@@ -213,5 +254,3 @@ class DataUserInterface extends React.Component {
     );
   }
 }
-
-export default DataUserInterface;
