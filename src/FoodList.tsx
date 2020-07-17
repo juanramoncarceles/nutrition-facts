@@ -5,15 +5,20 @@ import { IFood } from "./types";
 
 interface IProps {
   foodItems: IFood[];
+  open: boolean;
 }
 
 export default class FoodList extends React.Component<IProps> {
   public state = {
     selected: "",
-    open: false,
   };
 
-  disabledStyle = css`
+  /**
+   * Holds a reference to the HTML container of HTML elements that represent the food items.
+   */
+  private listHTMLContainer?: HTMLElement | null;
+
+  private disabledStyle = css`
     top: 300px;
     transform: translateX(-50%);
     left: 50%;
@@ -35,7 +40,7 @@ export default class FoodList extends React.Component<IProps> {
     }
   `;
 
-  activeStyle = css`
+  private activeStyle = css`
     min-height: 100vh;
     top: 0;
     left: 0;
@@ -69,20 +74,42 @@ export default class FoodList extends React.Component<IProps> {
     }
   `;
 
+  public componentDidMount() {
+    this.listHTMLContainer = document.getElementById("foodListItems");
+  }
+
+  private filterFood = (event: React.FormEvent<HTMLInputElement>) => {
+    if (!(event.target instanceof HTMLInputElement)) {
+      return;
+    }
+    const keyword = event.target.value.toLowerCase();
+    const foodList = this.listHTMLContainer?.children;
+    if (foodList) {
+      for (let i = 0; i < foodList.length; i++) {
+        const item = foodList[i] as HTMLElement;
+        if (
+          item.dataset.name &&
+          !item.dataset.name.toLowerCase().includes(keyword)
+        ) {
+          item.style.display = "none";
+        } else {
+          item.style.display = "unset";
+        }
+      }
+    }
+  };
+
   public render() {
     return (
       <div
         css={css`
           position: absolute;
-          ${this.state.open ? this.activeStyle : this.disabledStyle}
+          ${this.props.open ? this.activeStyle : this.disabledStyle}
         `}
-        id="foodList"
-        className="disabled"
-        data-active="false"
       >
         <form>
           <input
-            id="foodListInput"
+            onInput={this.filterFood}
             css={css`
               margin: auto;
               display: block;
@@ -102,9 +129,14 @@ export default class FoodList extends React.Component<IProps> {
             placeholder="Search food..."
           />
         </form>
-        <div id="food-list-items">
+        <div id="foodListItems">
           {this.props.foodItems.map((item) => (
-            <img key={item.name} src={item.image} alt={item.name} />
+            <img
+              key={item.name}
+              src={item.image}
+              alt={item.name}
+              data-name={item.name}
+            />
           ))}
           {/* <img
             id="banana"

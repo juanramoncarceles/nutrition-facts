@@ -7,10 +7,16 @@ import FoodList from "./FoodList";
 import ListToggle from "./ListToggle";
 import { IFood } from "./types";
 
+interface IState {
+  selectedItem: undefined | IFood;
+  foodItems: IFood[];
+  foodListOpen: boolean;
+}
+
 class App extends React.Component {
-  public state = {
-    selectedItem: undefined as undefined | IFood,
-    foodItems: [] as IFood[],
+  public state: IState = {
+    selectedItem: undefined,
+    foodItems: [],
     foodListOpen: false,
   };
 
@@ -39,6 +45,12 @@ class App extends React.Component {
     ];
     this.setState({ foodItems: foodItems });
   }
+
+  private toggleList = () => {
+    this.setState((prevState: IState) => ({
+      foodListOpen: !prevState.foodListOpen,
+    }));
+  };
 
   public render() {
     return (
@@ -80,8 +92,14 @@ class App extends React.Component {
           selectedItem={this.state.selectedItem}
           foodListOpen={this.state.foodListOpen}
         />
-        <FoodList foodItems={this.state.foodItems} />
-        <ListToggle />
+        <FoodList
+          foodItems={this.state.foodItems}
+          open={this.state.foodListOpen}
+        />
+        <ListToggle
+          ClickHandler={this.toggleList}
+          active={this.state.foodListOpen}
+        />
         <p
           css={css`
             flex-grow: 1;

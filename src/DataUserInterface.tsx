@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export default class DataUserInterface extends React.Component<IProps> {
-  barStyle = css`
+  private barStyle = css`
     transition-property: stroke-dasharray;
     transition-duration: 1s;
     transition-timing-function: cubic-bezier(0.12, 0.25, 0.22, 1.55);

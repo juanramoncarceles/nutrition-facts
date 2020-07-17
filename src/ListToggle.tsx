@@ -2,15 +2,16 @@
 import React from "react";
 import { css, jsx } from "@emotion/core";
 
-export default class ListToggle extends React.Component {
-  state = {
-    active: false,
-  };
+interface IProps {
+  ClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  active: boolean;
+}
 
-  render() {
+export default class ListToggle extends React.Component<IProps> {
+  public render() {
     return (
       <button
-        id="toggleFoodList"
+        onClick={this.props.ClickHandler}
         css={css`
           position: absolute;
           right: 0;
@@ -24,13 +25,13 @@ export default class ListToggle extends React.Component {
               transition: stroke-dasharray 1s;
             }
             & > .glass {
-              stroke-dasharray: ${this.state.active ? "0 16" : "16 16"};
+              stroke-dasharray: ${this.props.active ? "0 16" : "16 16"};
             }
             & > .handle {
-              stroke-dasharray: ${this.state.active ? "20 14" : "7.7 14"};
+              stroke-dasharray: ${this.props.active ? "20 14" : "7.7 14"};
             }
             & > .cross {
-              stroke-dasharray: ${this.state.active ? "12 14" : "0 14"};
+              stroke-dasharray: ${this.props.active ? "12 14" : "0 14"};
             }
           }
         `}
