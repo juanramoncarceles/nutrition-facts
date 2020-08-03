@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel src/index.html",
+    "dev": "npm run clean && cp ./src/images/* ./dist/ && parcel src/index.html",
+    "clean": "rm -rf ./dist/*",
     "format": "prettier \"src/**/*.{js,html}\" --write",
     "lint": "eslint \"src/**/*.{js,ts,tsx}\" --quiet --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
