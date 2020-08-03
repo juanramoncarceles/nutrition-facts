@@ -4,7 +4,7 @@ import { css, jsx } from "@emotion/core";
 import { IFood } from "./types";
 
 interface IProps {
-  selectedItem: IFood | undefined;
+  selectedItemData: IFood | undefined;
   foodListOpen: boolean;
 }
 
@@ -15,15 +15,29 @@ export default class DataUserInterface extends React.Component<IProps> {
     transition-timing-function: cubic-bezier(0.12, 0.25, 0.22, 1.55);
   `;
 
+  private verticalBarStyle = css`
+    clip-path: url(#barsClip);
+    stroke-width: 35px;
+  `;
+
+  private currentImageSrc = "";
+
+  public componentDidUpdate() {
+    // Save a value in the object just to compare it with the next props.
+    if (this.props.selectedItemData) {
+      this.currentImageSrc = this.props.selectedItemData.image;
+    }
+  }
+
   public render() {
     let image, calories, carbs, proteins, fats, fiber;
 
-    if (this.props.selectedItem) {
-      const item = this.props.selectedItem;
+    if (this.props.selectedItemData) {
+      const item = this.props.selectedItemData;
       image = item.image;
       calories = item.calories;
       carbs = item.carbs;
-      proteins = item.carbs;
+      proteins = item.proteins;
       fats = item.fats;
       fiber = item.fiber;
     } else {
@@ -45,14 +59,13 @@ export default class DataUserInterface extends React.Component<IProps> {
         viewBox="0 0 200 349.25"
       >
         <image
-          id="selectedFoodImage"
           css={css`
             transform: ${this.props.foodListOpen ? "scale(0.7)" : "scale(1)"};
             transform-origin: center;
             transform-box: fill-box;
-            transition: ${this.props.foodListOpen
-              ? "none"
-              : "transform 0.5s cubic-bezier(0, 1.42, 1, 1.69)"};
+            transition: ${this.currentImageSrc !== image
+              ? "transform 0.5s cubic-bezier(0,1.42,1,1.69)"
+              : "none"};
           `}
           href={image}
           x="45"
@@ -78,7 +91,7 @@ export default class DataUserInterface extends React.Component<IProps> {
             d="M100,23A92,92,0,1,1,8,115a92.1,92.1,0,0,1,92-92"
             css={css`
               ${this.barStyle}
-              stroke-dasharray: 0 578;
+              stroke-dasharray: ${calories} 578;
             `}
           />
         </g>
@@ -118,11 +131,11 @@ export default class DataUserInterface extends React.Component<IProps> {
             y2="334"
             css={css`
               ${this.barStyle}
-              clip-path: url(#barsClip);
+              ${this
+                .verticalBarStyle}
               transform: translateX(-75px);
               stroke: #bdf2ff;
-              stroke-width: 35px;
-              stroke-dasharray: 0 100;
+              stroke-dasharray: ${carbs} 100;
             `}
           />
           <line
@@ -133,11 +146,11 @@ export default class DataUserInterface extends React.Component<IProps> {
             y2="334"
             css={css`
               ${this.barStyle}
-              clip-path: url(#barsClip);
+              ${this
+                .verticalBarStyle}
               transform: translateX(-25px);
               stroke: #ffae67;
-              stroke-width: 35px;
-              stroke-dasharray: 0 100;
+              stroke-dasharray: ${proteins} 100;
             `}
           />
           <line
@@ -148,11 +161,10 @@ export default class DataUserInterface extends React.Component<IProps> {
             y2="334"
             css={css`
               ${this.barStyle}
-              clip-path: url(#barsClip);
+              ${this.verticalBarStyle}
               transform: translateX(25px);
               stroke: #fffe8f;
-              stroke-width: 35px;
-              stroke-dasharray: 0 100;
+              stroke-dasharray: ${fats} 100;
             `}
           />
           <line
@@ -163,11 +175,10 @@ export default class DataUserInterface extends React.Component<IProps> {
             y2="334"
             css={css`
               ${this.barStyle}
-              clip-path: url(#barsClip);
+              ${this.verticalBarStyle}
               transform: translateX(75px);
               stroke: #d7ff61;
-              stroke-width: 35px;
-              stroke-dasharray: 0 100;
+              stroke-dasharray: ${fiber} 100;
             `}
           />
           <g

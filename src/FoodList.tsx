@@ -4,6 +4,7 @@ import { css, jsx } from "@emotion/core";
 import { IFood } from "./types";
 
 interface IProps {
+  ClickHandler: (event: React.MouseEvent<HTMLImageElement>) => void;
   foodItems: IFood[];
   open: boolean;
 }
@@ -25,17 +26,16 @@ export default class FoodList extends React.Component<IProps> {
     & > form {
       display: none;
     }
-    & > .food-list-items {
-      display: flex;
+    & > #foodListItems {
       align-items: center;
     }
-    & > .food-list-items > img {
+    & > #foodListItems > img {
       position: absolute;
     }
-    & > .food-list-items > img.selected {
+    & > #foodListItems > img.selected {
       transition: opacity 1s, transform 0.5s;
     }
-    & > .food-list-items > img:not(.selected) {
+    & > #foodListItems > img:not(.selected) {
       opacity: 0;
     }
   `;
@@ -50,13 +50,12 @@ export default class FoodList extends React.Component<IProps> {
     & > form {
       display: unset;
     }
-    & > .food-list-items {
-      display: flex;
+    & > #foodListItems {
       flex-wrap: wrap;
       justify-content: center;
       margin-top: 1.5rem;
     }
-    & > .food-list-items > img {
+    & > #foodListItems > img {
       width: 50%;
       max-width: 200px;
       padding: 1.2rem;
@@ -65,11 +64,11 @@ export default class FoodList extends React.Component<IProps> {
       filter: drop-shadow(0px 4px 4px #3e3e3e);
       transition: opacity 1s, transform 0.5s;
     }
-    & > .food-list-items > img.selected {
+    & > #foodListItems > img.selected {
       opacity: 0.3;
       cursor: unset;
     }
-    & > .food-list-items > img:not(.selected):hover {
+    & > #foodListItems > img:not(.selected):hover {
       transform: scale(1.1);
     }
   `;
@@ -129,13 +128,19 @@ export default class FoodList extends React.Component<IProps> {
             placeholder="Search food..."
           />
         </form>
-        <div id="foodListItems">
+        <div
+          id="foodListItems"
+          css={css`
+            display: flex;
+          `}
+        >
           {this.props.foodItems.map((item) => (
             <img
               key={item.name}
               src={item.image}
               alt={item.name}
               data-name={item.name}
+              onClick={this.props.ClickHandler}
             />
           ))}
           {/* <img

@@ -8,13 +8,15 @@ import ListToggle from "./ListToggle";
 import { IFood } from "./types";
 
 interface IState {
-  selectedItem: undefined | IFood;
+  selectedItemData: undefined | IFood;
+  selectedItem: undefined | HTMLElement;
   foodItems: IFood[];
   foodListOpen: boolean;
 }
 
 class App extends React.Component {
   public state: IState = {
+    selectedItemData: undefined,
     selectedItem: undefined,
     foodItems: [],
     foodListOpen: false,
@@ -52,6 +54,27 @@ class App extends React.Component {
     }));
   };
 
+  private selectFoodItem = (event: React.MouseEvent) => {
+    if (!(event.currentTarget instanceof HTMLElement)) {
+      return;
+    }
+    const selectedItem = event.currentTarget;
+    if (this.state.selectedItem === selectedItem) {
+      return;
+    }
+    if (this.state.selectedItem)
+      this.state.selectedItem.classList.remove("selected");
+    selectedItem.classList.add("selected");
+    const item = this.state.foodItems.find(
+      (item) => item.name === (event.currentTarget as HTMLElement).dataset.name
+    );
+    this.setState({
+      selectedItemData: item,
+      selectedItem: event.currentTarget,
+      foodListOpen: false,
+    });
+  };
+
   public render() {
     return (
       <div
@@ -86,13 +109,14 @@ class App extends React.Component {
             font-size: 2rem;
           `}
         >
-          {this.state.selectedItem ? this.state.selectedItem.name : ""}
+          {this.state.selectedItemData ? this.state.selectedItemData.name : ""}
         </h2>
         <DataUserInterface
-          selectedItem={this.state.selectedItem}
+          selectedItemData={this.state.selectedItemData}
           foodListOpen={this.state.foodListOpen}
         />
         <FoodList
+          ClickHandler={this.selectFoodItem}
           foodItems={this.state.foodItems}
           open={this.state.foodListOpen}
         />
