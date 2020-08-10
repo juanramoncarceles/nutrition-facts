@@ -31,17 +31,12 @@ export default class FoodList extends React.Component<IProps> {
     & > form {
       display: none;
     }
-    & > #foodListItems {
-      align-items: center;
-    }
-    & > #foodListItems > img {
-      position: absolute;
-    }
-    & > #foodListItems > img.selected {
-      transition: opacity 1s, transform 0.5s;
-    }
-    & > #foodListItems > img:not(.selected) {
-      opacity: 0;
+  `;
+
+  private foodListStyle = css`
+    display: flex;
+    & > img.selected {
+      opacity: 0.3;
     }
   `;
 
@@ -64,14 +59,11 @@ export default class FoodList extends React.Component<IProps> {
       width: 50%;
       max-width: 200px;
       padding: 1.2rem;
-      cursor: pointer;
-      opacity: 1;
       filter: drop-shadow(0px 4px 4px #3e3e3e);
       transition: opacity 1s, transform 0.5s;
     }
-    & > #foodListItems > img.selected {
-      opacity: 0.3;
-      cursor: unset;
+    & > #foodListItems > img:not(.selected) {
+      cursor: pointer;
     }
     & > #foodListItems > img:not(.selected):hover {
       transform: scale(1.1);
@@ -151,7 +143,7 @@ export default class FoodList extends React.Component<IProps> {
         <div
           id="foodListItems"
           css={css`
-            display: flex;
+            ${this.foodListStyle}
           `}
         >
           {this.props.foodItems.map((item) => (

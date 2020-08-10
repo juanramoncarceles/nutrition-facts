@@ -1,5 +1,5 @@
-
-☐ When the list is opened the selected item transitions from opacity 1 to transparent. It should be transparent always without any transition.
+☐ Connect to Google Sheets with all the data.
+☐ Open list in an interesting way.
 
 Maybe:
 ☐ When the list is opened the container doesn't transition.
@@ -8,3 +8,4 @@ Maybe:
 
 DONE:
   ✔ The filter to look for a food item in the list doesn't work. @done(20-08-10 10:33)
+  ✔ When the list is opened the selected item transitions from opacity 1 to transparent. It should be transparent always without any transition. @done(20-08-10 11:06)
