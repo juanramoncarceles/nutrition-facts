@@ -29,6 +29,12 @@ class App extends React.Component {
     });
   }
 
+  private camelToStandardCase = (string: string) =>
+    string[0].toUpperCase() +
+    string
+      .slice(1, string.length)
+      .replace(/[A-Z]/g, (letter) => ` ${letter.toLowerCase()}`);
+
   private getFoodData = async (): Promise<IFood[]> => {
     try {
       const response = await fetch("./fooddata.json");
@@ -108,7 +114,9 @@ class App extends React.Component {
             font-size: 2rem;
           `}
         >
-          {this.state.selectedItemData ? this.state.selectedItemData.name : ""}
+          {this.state.selectedItemData
+            ? this.camelToStandardCase(this.state.selectedItemData.name)
+            : ""}
         </h2>
         <DataUserInterface
           selectedItemData={this.state.selectedItemData}
