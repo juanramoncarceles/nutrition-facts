@@ -13,7 +13,7 @@ export default class DataUserInterface extends React.Component<IProps> {
   private barStyle = css`
     transition-property: stroke-dasharray;
     transition-duration: 2s;
-    transition-timing-function: cubic-bezier(0.12, 0.25, 0.22, 1.55);
+    transition-timing-function: cubic-bezier(0.1, 0.25, 0.55, 1.25);
   `;
 
   private verticalBarStyle = css`
@@ -22,6 +22,18 @@ export default class DataUserInterface extends React.Component<IProps> {
   `;
 
   private currentImageSrc = "";
+
+  // Set the value for the maximum calories value that can be displayed, full circle.
+  private maxCaloriesValue = 600;
+
+  private caloriesPathMaxLength!: number;
+
+  public componentDidMount() {
+    const caloriesPath = (document.getElementById(
+      "caloriesPath"
+    ) as unknown) as SVGPathElement;
+    this.caloriesPathMaxLength = caloriesPath.getTotalLength();
+  }
 
   public componentDidUpdate(prevProps: IProps) {
     const itemData = this.props.selectedItemData;
@@ -124,11 +136,14 @@ export default class DataUserInterface extends React.Component<IProps> {
             d="M100,207a92,92,0,1,1,92-92A92.1,92.1,0,0,1,100,207Z"
           />
           <path
-            d="M100,23A92,92,0,1,1,8,115a92.1,92.1,0,0,1,92-92"
+            id="caloriesPath"
             css={css`
               ${this.barStyle}
-              stroke-dasharray: ${calories} 578;
+              stroke-dasharray: ${
+                (calories * this.caloriesPathMaxLength) / this.maxCaloriesValue
+              } ${this.caloriesPathMaxLength};
             `}
+            d="M100,23A92,92,0,1,1,8,115a92.1,92.1,0,0,1,92-92"
           />
         </g>
         <g
@@ -149,9 +164,11 @@ export default class DataUserInterface extends React.Component<IProps> {
             transform="translate(100 210)"
             css={css`
               text-anchor: middle;
+              fill: ${calories < this.maxCaloriesValue / 2 ? "#fff" : "#000"};
+              transition: fill 2s;
             `}
           >
-            <tspan id="caloriesValue">{calories}</tspan> Kcal.
+            <tspan id="caloriesValue">0</tspan> Kcal.
           </text>
         </g>
         <g>

@@ -1,7 +1,7 @@
 ☐ Open list in an interesting way.
-☐ Change the fill of the Kcal. text depending on how is the stroke to make it more visible.
 ☐ Food title should be capitalized and with spaces.
 ☐ At start put a button in the center to open the food list.
+☐ Show that those are values for 100g/100ml.
 
 Maybe:
 ☐ When the list is opened the container doesn't transition.
@@ -12,3 +12,4 @@ DONE:
   ✔ The filter to look for a food item in the list doesn't work. @done(20-08-10 10:33)
   ✔ When the list is opened the selected item transitions from opacity 1 to transparent. It should be transparent always without any transition. @done(20-08-10 11:06)
   ✘ Connect to Google Sheets with all the data. @cancelled(20-08-10 17:25)
+  ✔ Change the fill of the Kcal. text depending on how is the stroke to make it more visible. @done(20-08-10 18:31)
