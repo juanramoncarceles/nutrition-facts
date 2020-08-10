@@ -27,7 +27,7 @@ class App extends React.Component {
     // Example of the data that should be received.
     const foodItems = [
       {
-        name: "food1",
+        name: "avocado",
         calories: 10,
         carbs: 20,
         proteins: 30,
@@ -36,7 +36,7 @@ class App extends React.Component {
         image: "avocado.svg",
       },
       {
-        name: "food2",
+        name: "banana",
         calories: 15,
         carbs: 25,
         proteins: 35,

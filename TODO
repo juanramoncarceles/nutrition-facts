@@ -1,7 +1,10 @@
 
-☐ The filter to look for a food item in the list doesn't work.
 ☐ When the list is opened the selected item transitions from opacity 1 to transparent. It should be transparent always without any transition.
 
 Maybe:
 ☐ When the list is opened the container doesn't transition.
 ☐ When a new item is selected it should transition also from 0 opacity to 1.
+
+
+DONE:
+  ✔ The filter to look for a food item in the list doesn't work. @done(20-08-10 10:33)

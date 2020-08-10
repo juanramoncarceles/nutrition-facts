@@ -17,7 +17,12 @@ export default class FoodList extends React.Component<IProps> {
   /**
    * Holds a reference to the HTML container of HTML elements that represent the food items.
    */
-  private listHTMLContainer?: HTMLElement | null;
+  private listHTMLContainer!: HTMLElement | null;
+
+  /**
+   * Holds a reference to the HTML input element to filter food items.
+   */
+  private foodListInput!: HTMLInputElement | null;
 
   private disabledStyle = css`
     top: 300px;
@@ -74,21 +79,28 @@ export default class FoodList extends React.Component<IProps> {
   `;
 
   public componentDidMount() {
+    this.foodListInput = document.getElementById(
+      "foodListInput"
+    ) as HTMLInputElement;
     this.listHTMLContainer = document.getElementById("foodListItems");
   }
 
-  private filterFood = (event: React.FormEvent<HTMLInputElement>) => {
+  private onInputHandler = (event: React.FormEvent<HTMLInputElement>) => {
     if (!(event.target instanceof HTMLInputElement)) {
       return;
     }
     const keyword = event.target.value.toLowerCase();
+    this.filterFood(keyword);
+  };
+
+  private filterFood = (string: string) => {
     const foodList = this.listHTMLContainer?.children;
     if (foodList) {
       for (let i = 0; i < foodList.length; i++) {
         const item = foodList[i] as HTMLElement;
         if (
           item.dataset.name &&
-          !item.dataset.name.toLowerCase().includes(keyword)
+          !item.dataset.name.toLowerCase().includes(string)
         ) {
           item.style.display = "none";
         } else {
@@ -97,6 +109,13 @@ export default class FoodList extends React.Component<IProps> {
       }
     }
   };
+
+  componentDidUpdate(prevProps: IProps) {
+    if (!this.props.open) {
+      (this.foodListInput as HTMLInputElement).value = "";
+      this.filterFood("");
+    }
+  }
 
   public render() {
     return (
@@ -108,7 +127,8 @@ export default class FoodList extends React.Component<IProps> {
       >
         <form>
           <input
-            onInput={this.filterFood}
+            id="foodListInput"
+            onInput={this.onInputHandler}
             css={css`
               margin: auto;
               display: block;
