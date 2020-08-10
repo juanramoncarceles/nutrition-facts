@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run clean && cp ./src/images/* ./dist/ && parcel src/index.html",
+    "dev": "npm run clean && cp ./src/images/* ./dist/ && cp ./src/fooddata.json ./dist/ && parcel src/index.html",
     "clean": "rm -rf ./dist/*",
     "format": "prettier \"src/**/*.{js,html}\" --write",
     "lint": "eslint \"src/**/*.{js,ts,tsx}\" --quiet --fix",
@@ -32,5 +32,8 @@
     "@emotion/core": "^10.0.28",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
-  }
+  },
+  "browserslist": [
+    "Chrome 78"
+  ]
 }

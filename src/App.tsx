@@ -23,30 +23,29 @@ class App extends React.Component {
   };
 
   public componentDidMount() {
-    // Fetch the food data from the Google Sheet
-    // Example of the data that should be received.
-    const foodItems = [
-      {
-        name: "avocado",
-        calories: 10,
-        carbs: 20,
-        proteins: 30,
-        fats: 40,
-        fiber: 50,
-        image: "avocado.svg",
-      },
-      {
-        name: "banana",
-        calories: 15,
-        carbs: 25,
-        proteins: 35,
-        fats: 45,
-        fiber: 55,
-        image: "banana.svg",
-      },
-    ];
-    this.setState({ foodItems: foodItems });
+    // Fetch the food data from a JSON file.
+    this.getFoodData().then((foodItemsData) => {
+      this.setState({ foodItems: foodItemsData });
+    });
   }
+
+  private getFoodData = async (): Promise<IFood[]> => {
+    try {
+      const response = await fetch("./fooddata.json");
+      if (response.ok === true && response.status === 200) {
+        return response.json();
+      } else {
+        console.warn(
+          "A response not 'ok' or status not 200 was received: ",
+          response
+        );
+        return [];
+      }
+    } catch (error) {
+      console.error("Error fetching food data: ", error);
+      return [];
+    }
+  };
 
   private toggleList = () => {
     this.setState((prevState: IState) => ({
