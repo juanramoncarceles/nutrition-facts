@@ -2,6 +2,7 @@
 import React from "react";
 import { css, jsx } from "@emotion/core";
 import { IFood } from "./types";
+import { CountUp } from "countup.js";
 
 interface IProps {
   selectedItemData: IFood | undefined;
@@ -11,7 +12,7 @@ interface IProps {
 export default class DataUserInterface extends React.Component<IProps> {
   private barStyle = css`
     transition-property: stroke-dasharray;
-    transition-duration: 1s;
+    transition-duration: 2s;
     transition-timing-function: cubic-bezier(0.12, 0.25, 0.22, 1.55);
   `;
 
@@ -22,16 +23,52 @@ export default class DataUserInterface extends React.Component<IProps> {
 
   private currentImageSrc = "";
 
-  public componentDidUpdate() {
-    // Save a value in the object just to compare it with the next props.
-    if (this.props.selectedItemData) {
-      this.currentImageSrc = this.props.selectedItemData.image;
+  public componentDidUpdate(prevProps: IProps) {
+    const itemData = this.props.selectedItemData;
+    if (itemData) {
+      // Save a value in the object just to compare it with the next props.
+      this.currentImageSrc = itemData.image;
+      // The previous data.
+      const prevData = prevProps.selectedItemData;
+      // Calories count.
+      const caloriesCountUp = new CountUp("caloriesValue", itemData.calories, {
+        startVal: prevData ? prevData.calories : 0,
+      });
+      if (!caloriesCountUp.error) caloriesCountUp.start();
+      // Carbs count.
+      const carbsCountUp = new CountUp("carbsValueDisplay", itemData.carbs, {
+        startVal: prevData ? prevData.carbs : 0,
+        decimalPlaces: 1,
+      });
+      if (!carbsCountUp.error) carbsCountUp.start();
+      // Proteins count.
+      const proteinsCountUp = new CountUp(
+        "proteinsValueDisplay",
+        itemData.proteins,
+        {
+          startVal: prevData ? prevData.proteins : 0,
+          decimalPlaces: 1,
+        }
+      );
+      if (!proteinsCountUp.error) proteinsCountUp.start();
+      // Fats count.
+      const fatsCountUp = new CountUp("fatsValueDisplay", itemData.fats, {
+        startVal: prevData ? prevData.fats : 0,
+        decimalPlaces: 1,
+      });
+      if (!fatsCountUp.error) fatsCountUp.start();
+      // Fiber count.
+      const fiberCountUp = new CountUp("fiberValueDisplay", itemData.fiber, {
+        startVal: prevData ? prevData.fiber : 0,
+        decimalPlaces: 1,
+      });
+      if (!fiberCountUp.error) fiberCountUp.start();
     }
   }
 
   public render() {
+    // Values for the SVG image and strokes.
     let image, calories, carbs, proteins, fats, fiber;
-
     if (this.props.selectedItemData) {
       const item = this.props.selectedItemData;
       image = item.image;
@@ -87,7 +124,6 @@ export default class DataUserInterface extends React.Component<IProps> {
             d="M100,207a92,92,0,1,1,92-92A92.1,92.1,0,0,1,100,207Z"
           />
           <path
-            id="caloriesBar"
             d="M100,23A92,92,0,1,1,8,115a92.1,92.1,0,0,1,92-92"
             css={css`
               ${this.barStyle}
@@ -110,13 +146,12 @@ export default class DataUserInterface extends React.Component<IProps> {
             calories
           </text>
           <text
-            id="caloriesValue"
             transform="translate(100 210)"
             css={css`
               text-anchor: middle;
             `}
           >
-            {calories} Kcal.
+            <tspan id="caloriesValue">{calories}</tspan> Kcal.
           </text>
         </g>
         <g>
@@ -124,7 +159,6 @@ export default class DataUserInterface extends React.Component<IProps> {
             <rect x="82.5" y="234" width="35" height="100" rx="3" ry="3" />
           </clipPath>
           <line
-            id="carbsBar"
             x1="100"
             y1="234"
             x2="100"
@@ -139,7 +173,6 @@ export default class DataUserInterface extends React.Component<IProps> {
             `}
           />
           <line
-            id="proteinsBar"
             x1="100"
             y1="234"
             x2="100"
@@ -154,7 +187,6 @@ export default class DataUserInterface extends React.Component<IProps> {
             `}
           />
           <line
-            id="fatsBar"
             x1="100"
             y1="234"
             x2="100"
@@ -168,7 +200,6 @@ export default class DataUserInterface extends React.Component<IProps> {
             `}
           />
           <line
-            id="fiberBar"
             x1="100"
             y1="234"
             x2="100"
@@ -243,17 +274,17 @@ export default class DataUserInterface extends React.Component<IProps> {
               }
             `}
           >
-            <text id="fiberValue" transform="translate(175 346)">
-              {fiber}g
+            <text transform="translate(175 346)">
+              <tspan id="fiberValueDisplay">0.0</tspan> g
             </text>
-            <text id="fatsValue" transform="translate(125 346)">
-              {fats}g
+            <text transform="translate(125 346)">
+              <tspan id="fatsValueDisplay">0.0</tspan> g
             </text>
-            <text id="proteinsValue" transform="translate(75 346)">
-              {proteins}g
+            <text transform="translate(75 346)">
+              <tspan id="proteinsValueDisplay">0.0</tspan> g
             </text>
-            <text id="carbsValue" transform="translate(25 346)">
-              {carbs}g
+            <text transform="translate(25 346)">
+              <tspan id="carbsValueDisplay">0.0</tspan> g
             </text>
             <text transform="translate(175 229)">fiber</text>
             <text transform="translate(125 229)">fats</text>
